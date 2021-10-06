@@ -10,13 +10,10 @@ const db = require("./models");
 require('dotenv').config();
 
 const userRouter = require("./routes/users");
-const artistRouter = require("./routes/artists");
-const eventRouter = require("./routes/events");
+
 
 
 app.use("/users", userRouter);
-app.use("/artists", artistRouter);
-app.use("/events", eventRouter);
 
 
 
