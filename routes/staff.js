@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { staffs } = require("../models");
+const { staff } = require("../models");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 router.get("/", async (req, res) => {
-  const listOfstaffs = await staffs.findAll();
-  res.json(listOfstaffs);
+  const listOfStaff = await staff.findAll();
+  res.json(listOfStaff);
 });
 
 router.post("/register", async (req, res) => {
   const { enroll, password, accessCode } = req.body;
 
-  const staff = await staffs.findOne({ where: { enroll: enroll } });
+  const staff = await staff.findOne({ where: { enroll: enroll } });
 
   if (staff) {
     res.json({ error: "enroll already exists", code: 404 });
@@ -20,7 +20,7 @@ router.post("/register", async (req, res) => {
     res.json({ error: "Invalid access code", code: 401 });
   } else {
     bcrypt.hash(password, 10).then((hash) => {
-      staffs.create({
+      staff.create({
         enroll: enroll,
         password: hash,
       });
@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { enroll, password } = req.body;
 
-  const staff = await staffs.findOne({ where: { enroll: enroll } });
+  const staff = await staff.findOne({ where: { enroll: enroll } });
 
   if (!staff) {
     res.json({ error: "staff Doesn't Exist" });

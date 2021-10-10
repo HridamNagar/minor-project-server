@@ -15,7 +15,7 @@ const staffRouter = require("./routes/staff");
 
 
 app.use("/users", studentRouter);
-app.use("/users", staffRouter);
+app.use("/staff", staffRouter);
 
 
 
