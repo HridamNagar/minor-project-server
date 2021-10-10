@@ -10,16 +10,16 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { firstName, lastName, userName, email, password } = req.body;
+  const { enroll, password } = req.body;
 
-  const user = await users.findOne({ where: { email: email } });
+  const user = await users.findOne({ where: { enroll: enroll } });
 
   if (user) {
-    res.json({ error: "Email already exists", code: 404 });
+    res.json({ error: "enroll already exists", code: 404 });
   } else {
     bcrypt.hash(password, 10).then((hash) => {
       users.create({
-        email: email,
+        enroll: enroll,
         password: hash,
       });
     });
@@ -29,18 +29,18 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { enroll, password } = req.body;
 
-  const user = await users.findOne({ where: { email: email } });
+  const user = await users.findOne({ where: { enroll: enroll } });
 
   if (!user) {
     res.json({ error: "User Doesn't Exist" });
   } else {
     bcrypt.compare(password, user.password).then((match) => {
-      if (!match) res.json({ error: "Wrong email And Password Combination" });
+      if (!match) res.json({ error: "Wrong enroll And Password Combination" });
       else {
         const accessToken = sign(
-          { email: user.email, id: user.id },
+          { enroll: user.enroll, id: user.id },
           "namakshamak"
         );
         res.json({ accessToken });
