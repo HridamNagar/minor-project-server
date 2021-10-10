@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const { users } = require("../models");
+const { students } = require("../models");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 router.get("/", async (req, res) => {
-  const listOfUsers = await users.findAll();
-  res.json(listOfUsers);
+  const listOfStudents = await students.findAll();
+  res.json(listOfStudents);
 });
 
 router.post("/register", async (req, res) => {
   const { enroll, password } = req.body;
 
-  const user = await users.findOne({ where: { enroll: enroll } });
+  const student = await students.findOne({ where: { enroll: enroll } });
 
-  if (user) {
+  if (student) {
     res.json({ error: "enroll already exists", code: 404 });
   } else {
     bcrypt.hash(password, 10).then((hash) => {
-      users.create({
+      students.create({
         enroll: enroll,
         password: hash,
       });
@@ -31,16 +31,16 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { enroll, password } = req.body;
 
-  const user = await users.findOne({ where: { enroll: enroll } });
+  const student = await students.findOne({ where: { enroll: enroll } });
 
-  if (!user) {
-    res.json({ error: "User Doesn't Exist" });
+  if (!student) {
+    res.json({ error: "student Doesn't Exist" });
   } else {
-    bcrypt.compare(password, user.password).then((match) => {
+    bcrypt.compare(password, student.password).then((match) => {
       if (!match) res.json({ error: "Wrong enroll And Password Combination" });
       else {
         const accessToken = sign(
-          { enroll: user.enroll, id: user.id },
+          { enroll: student.enroll, id: student.id },
           "namakshamak"
         );
         res.json({ accessToken });

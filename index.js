@@ -9,11 +9,13 @@ app.use(express.json());
 const db = require("./models");
 require('dotenv').config();
 
-const userRouter = require("./routes/users");
+const studentRouter = require("./routes/students");
+const staffRouter = require("./routes/staff");
 
 
 
-app.use("/users", userRouter);
+app.use("/users", studentRouter);
+app.use("/users", staffRouter);
 
 
 
