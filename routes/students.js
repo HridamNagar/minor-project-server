@@ -4,9 +4,20 @@ const { students } = require("../models");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   const listOfStudents = await students.findAll();
   res.json(listOfStudents);
+});
+
+router.post("/find", async (req, res) => {
+  const {enroll} = req.body;
+  const student = await students.findOne({ where: { enroll: enroll } });
+  if (!student) {
+    res.json({ error: "student Doesn't Exist" });
+  } else {
+        res.json({error:"student exists"});
+
+  }
 });
 
 router.post("/register", async (req, res) => {
